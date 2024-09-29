@@ -2,8 +2,11 @@ import {
   DataSummary,
   EndPointRequestParams,
   EndPointResponse,
+  EndPointSearchParams,
   GetRepoForUserPayload,
   RepositoryResponse,
+  Search,
+  SearchInRepoPayload,
   User,
 } from '@github-graphql-assignment/util';
 
@@ -44,6 +47,51 @@ export function convertAPIResponseToClientModel(
         createdAt: node.createdAt,
         forkCount: node.forkCount,
         updatedAt: node.updatedAt,
+      };
+    }),
+  };
+}
+
+//search
+export function convertSearchParamsForAPIRequest(
+  searchInRepoPayload: SearchInRepoPayload,
+): EndPointSearchParams {
+  return {
+    userName: searchInRepoPayload.userName,
+    first: searchInRepoPayload.first,
+    after: searchInRepoPayload.after ? searchInRepoPayload.after : null,
+    orderBy: searchInRepoPayload.orderBy
+      ? {
+          field: searchInRepoPayload.orderBy.colId,
+          direction: searchInRepoPayload.orderBy.sort,
+        }
+      : null,
+    searchString: searchInRepoPayload.searchString,
+  };
+}
+
+export function convertSearchAPIResponseToClientModel(
+  response: EndPointResponse<Search>,
+): DataSummary<RepositoryResponse> {
+  return {
+    totalCount: response.data.search.repositoryCount,
+    pageInfo: {
+      // response.data.search.pageInfo.hasNextPage response has no pageInfo
+      endCursor: '',
+      startCursor: '',
+      hasNextPage: false,
+    },
+    data: response.data.search.edges.map((edge) => {
+      return {
+        id: edge.node.id,
+        name: edge.node.name,
+        url: edge.node.url,
+        stargazerCount: edge.node.stargazerCount,
+        primaryLanguage: edge.node.primaryLanguage?.name || '',
+        description: edge.node.description,
+        createdAt: edge.node.createdAt,
+        forkCount: edge.node.forkCount,
+        updatedAt: edge.node.updatedAt,
       };
     }),
   };

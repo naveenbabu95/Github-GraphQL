@@ -23,13 +23,13 @@ describe('GraphViewStore', () => {
   } = {}) {
     const mockReadRepoService = createSpyFromClass(ReadRepoService);
     if (hasError) {
-      mockReadRepoService.GetRepoForUser.throwWith({
+      mockReadRepoService.getRepoForUser.throwWith({
         error: {
           code: 404,
         },
       });
     } else {
-      mockReadRepoService.GetRepoForUser.nextWith({
+      mockReadRepoService.getRepoForUser.nextWith({
         totalCount: 2,
         pageInfo: {
           endCursor: 'Y3Vyc29yOnYyOpHOGEiqIw==',
@@ -75,7 +75,7 @@ describe('GraphViewStore', () => {
     const { store, mockReadRepoService } = setup();
     store.ngrxOnStateInit();
     flushMicrotasks();
-    expect(mockReadRepoService.GetRepoForUser).toHaveBeenCalledWith({
+    expect(mockReadRepoService.getRepoForUser).toHaveBeenCalledWith({
       userName: 'testUser',
       first: RECORDS_TO_BE_SHOWN_FOR_GRAPH,
     });

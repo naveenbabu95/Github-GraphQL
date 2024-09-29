@@ -5,6 +5,10 @@ export interface GetRepoForUserPayload {
   orderBy?: SortModel;
 }
 
+export interface SearchInRepoPayload extends GetRepoForUserPayload {
+  searchString: string;
+}
+
 export interface DataSummary<T> {
   pageInfo: PageInfo;
   totalCount: number;

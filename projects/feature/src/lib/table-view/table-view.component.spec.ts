@@ -45,18 +45,18 @@ describe('TableViewComponent', () => {
     const mockApolloService = createSpyFromClass(Apollo);
     const mockReadRepoService = createSpyFromClass(ReadRepoService);
     if (showError) {
-      mockReadRepoService.GetRepoForUser.throwWith({
+      mockReadRepoService.getRepoForUser.throwWith({
         error: {
           code: 404,
         },
       });
     } else if (emptyResponse) {
-      mockReadRepoService.GetRepoForUser.nextWith({
+      mockReadRepoService.getRepoForUser.nextWith({
         ...DATA_SUMMARY_MOCK,
         data: [],
       });
     } else {
-      mockReadRepoService.GetRepoForUser.nextWith(DATA_SUMMARY_MOCK);
+      mockReadRepoService.getRepoForUser.nextWith(DATA_SUMMARY_MOCK);
     }
 
     const { fixture } = await render(TableViewComponent, {
@@ -120,10 +120,10 @@ describe('TableViewComponent', () => {
     const mockChild = fixture.debugElement.query(
       By.css('app-ag-grid-wrapper'),
     ).componentInstance;
-    expect(mockReadRepoService.GetRepoForUser).toHaveBeenCalledTimes(1);
+    expect(mockReadRepoService.getRepoForUser).toHaveBeenCalledTimes(1);
     mockChild.pageUpdated.emit();
 
-    expect(mockReadRepoService.GetRepoForUser).toHaveBeenCalledTimes(2); //service called again
+    expect(mockReadRepoService.getRepoForUser).toHaveBeenCalledTimes(2); //service called again
   });
 
   it('verifies sort method is called with correct params when user sort is triggered', async () => {
@@ -132,10 +132,10 @@ describe('TableViewComponent', () => {
     const mockChild = fixture.debugElement.query(
       By.css('app-ag-grid-wrapper'),
     ).componentInstance;
-    expect(mockReadRepoService.GetRepoForUser).toHaveBeenCalledTimes(1);
+    expect(mockReadRepoService.getRepoForUser).toHaveBeenCalledTimes(1);
     mockChild.sortParamUpdated.emit({ colId: 'name', sort: 'asc' });
 
-    expect(mockReadRepoService.GetRepoForUser).toHaveBeenCalledWith({
+    expect(mockReadRepoService.getRepoForUser).toHaveBeenCalledWith({
       after: '',
       first: 20,
       orderBy: {

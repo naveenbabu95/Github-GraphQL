@@ -37,13 +37,13 @@ describe('TableViewStore', () => {
   } = {}) {
     const mockReadRepoService = createSpyFromClass(ReadRepoService);
     if (hasError) {
-      mockReadRepoService.GetRepoForUser.throwWith({
+      mockReadRepoService.getRepoForUser.throwWith({
         error: {
           code: 404,
         },
       });
     } else {
-      mockReadRepoService.GetRepoForUser.nextWith(serviceResponse);
+      mockReadRepoService.getRepoForUser.nextWith(serviceResponse);
     }
 
     const paramMapSubject = new BehaviorSubject(
@@ -91,7 +91,7 @@ describe('TableViewStore', () => {
     const { store, mockReadRepoService } = setup();
     runInitMethods(store);
     flushMicrotasks();
-    expect(mockReadRepoService.GetRepoForUser).toHaveBeenCalledWith({
+    expect(mockReadRepoService.getRepoForUser).toHaveBeenCalledWith({
       userName: 'testUser',
       first: TABLE_FETCH_LIMIT,
       after: undefined,

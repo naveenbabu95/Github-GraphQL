@@ -34,13 +34,13 @@ describe('GraphViewComponent', () => {
     const mockApolloService = createSpyFromClass(Apollo);
     const mockReadRepoService = createSpyFromClass(ReadRepoService);
     if (showError) {
-      mockReadRepoService.GetRepoForUser.throwWith({
+      mockReadRepoService.getRepoForUser.throwWith({
         error: {
           code: 404,
         },
       });
     } else {
-      mockReadRepoService.GetRepoForUser.nextWith(DATA_SUMMARY_MOCK);
+      mockReadRepoService.getRepoForUser.nextWith(DATA_SUMMARY_MOCK);
     }
 
     const { fixture } = await render(GraphViewComponent, {

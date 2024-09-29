@@ -146,7 +146,7 @@ export class TableViewStore extends ComponentStore<TableViewState> {
             orderBy: sortOrder?.colId ? sortOrder : undefined,
           };
           return this.readRepoService
-            .GetRepoForUser(getRepoForUserPayload)
+            .getRepoForUser(getRepoForUserPayload)
             .pipe(
               tap(() =>
                 this.patchState({

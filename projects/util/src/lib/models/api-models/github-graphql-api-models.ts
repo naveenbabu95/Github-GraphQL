@@ -5,12 +5,24 @@ export interface EndPointRequestParams {
   orderBy: { field: string; direction: string } | null;
 }
 
+export interface EndPointSearchParams extends EndPointRequestParams {
+  searchString: string;
+}
+
 export interface EndPointResponse<T> {
   data: T;
 }
 
 export interface User {
   user: { repositories: Repositories };
+}
+
+export interface Search {
+  search: { repositoryCount: number; edges: Edge[] };
+}
+
+interface Edge {
+  node: Node;
 }
 
 //non-exported interface
