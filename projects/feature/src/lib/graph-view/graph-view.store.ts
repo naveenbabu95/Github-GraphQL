@@ -85,7 +85,7 @@ export class GraphViewStore
           userName: userName as string,
           first: RECORDS_TO_BE_SHOWN_FOR_GRAPH,
         };
-        return this.readRepoService.GetRepoForUser(getRepoForUserPayload).pipe(
+        return this.readRepoService.getRepoForUser(getRepoForUserPayload).pipe(
           tapResponse(
             (response) => {
               this.patchState({

@@ -25,7 +25,7 @@ describe('ReadRepoService', () => {
   it('should call apollo query with correct params', () => {
     const { service, apolloService } = setup();
 
-    service.GetRepoForUser(GET_REPOS_FOR_USER_PAYLOAD_MOCK);
+    service.getRepoForUser(GET_REPOS_FOR_USER_PAYLOAD_MOCK);
 
     expect(apolloService.query).toHaveBeenCalledWith({
       query: GET_REPOSITORIES,
@@ -33,7 +33,7 @@ describe('ReadRepoService', () => {
     });
 
     service
-      .GetRepoForUser(GET_REPOS_FOR_USER_PAYLOAD_MOCK)
+      .getRepoForUser(GET_REPOS_FOR_USER_PAYLOAD_MOCK)
       .subscribe((response) => {
         expect(response).toBe(API_RESPONSE_USER_REPO_MOCK);
       });

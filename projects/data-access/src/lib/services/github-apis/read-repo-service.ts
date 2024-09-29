@@ -18,7 +18,7 @@ import {
 export class ReadRepoService {
   constructor(private apollo: Apollo) {}
 
-  GetRepoForUser(
+  getRepoForUser(
     getRepoForUserPayload: GetRepoForUserPayload,
   ): Observable<DataSummary<RepositoryResponse>> {
     return this.apollo
