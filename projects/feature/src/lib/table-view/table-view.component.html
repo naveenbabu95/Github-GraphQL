@@ -1,0 +1,27 @@
+<app-back-button></app-back-button>
+
+<h1 class="text-center text-3xl font-bold underline p-2">Table View</h1>
+@if (vm$ | async; as vm) {
+  @if (vm.showError) {
+    <p class="text-center p-4">
+      Error Occurred While Loading, Please try later
+    </p>
+  } @else if (vm.userRepos.length) {
+    <div data-testid="table-container">
+      <!-- TODO: implement sort -->
+      <!-- <div class="p-4">
+        <input matInput placeholder="Search" />
+
+        <button mat-flat-button (click)="onSearch()">Search</button>
+      </div> -->
+      <app-ag-grid-wrapper
+        [columnDefs]="vm.columnDefs"
+        [tableData]="{ rowData: vm.userRepos, totalCount: vm.totalRecords }"
+        (pageUpdated)="updatePage()"
+        (sortParamUpdated)="updateSort($event)"
+      ></app-ag-grid-wrapper>
+    </div>
+  } @else {
+    <p class="text-center p-4">No Records Found</p>
+  }
+}

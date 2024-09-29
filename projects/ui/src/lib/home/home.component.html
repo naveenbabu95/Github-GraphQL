@@ -1,0 +1,27 @@
+<app-header></app-header>
+
+<div class="p-4">
+  <input
+    matInput
+    [(ngModel)]="searchTerm"
+    placeholder="Search Username"
+    (keyup.enter)="onSearch()"
+  />
+  <button mat-flat-button (click)="onSearch()">Search</button>
+</div>
+<mat-divider></mat-divider>
+
+@if (viewType) {
+  <span class="p-3">View As:</span>
+  <mat-button-toggle-group>
+    <mat-button-toggle value="table" routerLink="/table/{{ searchTerm }}"
+      >Table</mat-button-toggle
+    >
+    <mat-button-toggle value="graph" routerLink="/graph/{{ searchTerm }}"
+      >Graph</mat-button-toggle
+    >
+  </mat-button-toggle-group>
+}
+<mat-divider></mat-divider>
+
+<router-outlet></router-outlet>

@@ -1,0 +1,21 @@
+<app-back-button></app-back-button>
+
+<h1 class="text-center text-3xl font-bold underline p-2">Graph View</h1>
+
+@if (vm$ | async; as vm) {
+  @if (vm.showError) {
+    <p class="text-center p-4">
+      Error Occurred While Loading, Please try later
+    </p>
+  } @else if (vm.isLoading) {
+    <div class="flex item-center p-4" data-testid="loader-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  } @else if (vm.graphModel.length) {
+    <div data-testid="graph-container">
+      <app-d3-wrapper [data]="vm.graphModel"></app-d3-wrapper>
+    </div>
+  } @else {
+    <p class="text-center p-4">No Records Found</p>
+  }
+}

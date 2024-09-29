@@ -1,0 +1,13 @@
+<div class="p-4">{{ totalCount }} records</div>
+<ag-grid-angular
+  class="ag-theme-quartz"
+  style="height: 500px"
+  role="grid"
+  [columnDefs]="columnDefs"
+  [rowModelType]="'infinite'"
+  [paginationPageSize]="paginationPageSize"
+  [cacheBlockSize]="cacheBlockSize"
+  [datasource]="dataSource"
+  (gridReady)="onGridReady($event)"
+>
+</ag-grid-angular>

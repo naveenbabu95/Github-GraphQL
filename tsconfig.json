@@ -2,6 +2,24 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@github-graphql-assignment/data-access": [
+        "projects/data-access/src/index.ts"
+      ],
+      "@github-graphql-assignment/util": [
+        "projects/util/src/index.ts"
+      ],
+      "@github-graphql-assignment/feature": [
+       "projects/feature/src/index.ts"
+      ],
+      "@github-graphql-assignment/ui": [
+        "projects/ui/src/index.ts"
+      ],
+      "@environment": [
+				"src/environments/environment.ts"
+      ],
+    },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
