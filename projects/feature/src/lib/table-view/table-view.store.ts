@@ -86,6 +86,7 @@ export class TableViewStore extends ComponentStore<TableViewState> {
         isLoading: loadingState === LoadingState.LOADING,
       };
     },
+    { debounce: true },
   );
 
   updateUserRepos(userRepos: RepositoryResponse[]) {

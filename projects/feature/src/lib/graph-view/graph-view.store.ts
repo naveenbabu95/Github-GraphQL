@@ -65,7 +65,7 @@ export class GraphViewStore
         isLoading: loadingState === LoadingState.LOADING,
       };
     },
-    // { debounce: true },
+    { debounce: true },
   );
   ngrxOnStateInit(): void {
     this.fetchReposForSpecificUser();

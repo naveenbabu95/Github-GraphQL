@@ -1,4 +1,4 @@
-import { TestBed, fakeAsync, flushMicrotasks } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideComponentStore } from '@ngrx/component-store';
@@ -74,7 +74,7 @@ describe('GraphViewStore', () => {
   it('should fetch repos for a specific user on state init', fakeAsync(() => {
     const { store, mockReadRepoService } = setup();
     store.ngrxOnStateInit();
-    flushMicrotasks();
+
     expect(mockReadRepoService.getRepoForUser).toHaveBeenCalledWith({
       userName: 'testUser',
       first: RECORDS_TO_BE_SHOWN_FOR_GRAPH,
@@ -84,7 +84,7 @@ describe('GraphViewStore', () => {
   it('should update state with fetched repos', fakeAsync(() => {
     const { store } = setup();
     store.ngrxOnStateInit();
-    flushMicrotasks();
+
     const state = subscribeSpyTo(store.state$);
     expect(state.getLastValue()?.userRepos).toEqual(MOCK_REPOS);
     expect(state.getLastValue()?.loadingState).toBe(LoadingState.LOADED);
@@ -94,7 +94,7 @@ describe('GraphViewStore', () => {
   it('should handle errors when fetching repos', fakeAsync(() => {
     const { store } = setup({ hasError: true });
     store.ngrxOnStateInit();
-    flushMicrotasks();
+
     const state = subscribeSpyTo(store.state$);
     expect(state.getLastValue()?.loadingState).toBe(LoadingState.ERROR);
   }));
@@ -102,8 +102,9 @@ describe('GraphViewStore', () => {
   it('should create the correct view model', fakeAsync(() => {
     const { store } = setup();
     store.ngrxOnStateInit();
-    flushMicrotasks();
+
     const vm = subscribeSpyTo(store.vm$);
+    tick();
     expect(vm.getLastValue()).toEqual({
       graphModel: [
         { x: 'repo1', y: 10 },
@@ -118,8 +119,9 @@ describe('GraphViewStore', () => {
   it('should show error in view model when loading state is ERROR', fakeAsync(() => {
     const { store } = setup({ hasError: true });
     store.ngrxOnStateInit();
-    flushMicrotasks();
+
     const vm = subscribeSpyTo(store.vm$);
+    tick();
     expect(vm.getLastValue()?.showError).toBe(true);
   }));
 });

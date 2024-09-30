@@ -1,4 +1,4 @@
-import { TestBed, fakeAsync, flushMicrotasks } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideComponentStore } from '@ngrx/component-store';
@@ -90,7 +90,6 @@ describe('TableViewStore', () => {
   it('should fetch repos for a specific user on state init', fakeAsync(() => {
     const { store, mockReadRepoService } = setup();
     runInitMethods(store);
-    flushMicrotasks();
     expect(mockReadRepoService.getRepoForUser).toHaveBeenCalledWith({
       userName: 'testUser',
       first: TABLE_FETCH_LIMIT,
@@ -103,7 +102,6 @@ describe('TableViewStore', () => {
     const { store } = setup();
     runInitMethods(store);
 
-    flushMicrotasks();
     const state = subscribeSpyTo(store.state$);
     expect(state.getLastValue()?.userRepos).toEqual(DATA_SUMMARY_MOCK.data);
     expect(state.getLastValue()?.loadingState).toBe(LoadingState.LOADED);
@@ -113,7 +111,6 @@ describe('TableViewStore', () => {
     const { store } = setup({ hasError: true });
     runInitMethods(store);
 
-    flushMicrotasks();
     const state = subscribeSpyTo(store.state$);
     expect(state.getLastValue()?.loadingState).toBe(LoadingState.ERROR);
   }));
@@ -122,8 +119,8 @@ describe('TableViewStore', () => {
     const { store } = setup();
     runInitMethods(store);
 
-    flushMicrotasks();
     const vm = subscribeSpyTo(store.vm$);
+    tick();
     expect(vm.getLastValue()).toEqual({
       userRepos: DATA_SUMMARY_MOCK.data,
       totalRecords: 2,
@@ -137,8 +134,8 @@ describe('TableViewStore', () => {
     const { store } = setup({ hasError: true });
     runInitMethods(store);
 
-    flushMicrotasks();
     const vm = subscribeSpyTo(store.vm$);
+    tick();
     expect(vm.getLastValue()?.showError).toBe(true);
   }));
 
@@ -171,7 +168,6 @@ describe('TableViewStore', () => {
     });
     runInitMethods(store);
 
-    flushMicrotasks();
     const state = subscribeSpyTo(store.state$);
     expect(state.getLastValue()?.afterCursor).toBeUndefined();
   }));
