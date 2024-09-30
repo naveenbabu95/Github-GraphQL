@@ -5,7 +5,6 @@ import { provideComponentStore } from '@ngrx/component-store';
 import { of } from 'rxjs';
 import { ReadRepoService } from '@github-graphql-assignment/data-access';
 import {
-  GetRepoForUserPayload,
   LoadingState,
   RECORDS_TO_BE_SHOWN_FOR_GRAPH,
   RepositoryResponse,

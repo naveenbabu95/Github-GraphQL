@@ -1,11 +1,11 @@
-export interface GetRepoForUserPayload {
+export interface getRepoForUserPayload {
   userName: string;
   first: number;
   after?: string;
   orderBy?: SortModel;
 }
 
-export interface SearchInRepoPayload extends GetRepoForUserPayload {
+export interface SearchInRepoPayload extends getRepoForUserPayload {
   searchString: string;
 }
 

@@ -3,9 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { ReadRepoService } from '@github-graphql-assignment/data-access';
 import {
   COLUMN_DEFINITION_FOR_REPO_TABLE,
-  GetRepoForUserPayload,
+  getRepoForUserPayload,
   LoadingState,
   RepositoryResponse,
+  SearchInRepoPayload,
   SortModel,
   TABLE_FETCH_LIMIT,
 } from '@github-graphql-assignment/util';
@@ -101,6 +102,12 @@ export class TableViewStore extends ComponentStore<TableViewState> {
       pageNo: state.pageNo + 1,
     }),
   );
+  readonly updateSearch = this.updater(
+    (state, searchQuery: string): TableViewState => ({
+      ...state,
+      searchQuery,
+    }),
+  );
 
   readonly updateSort = this.updater(
     (state, sortParam: SortModel): TableViewState => ({
@@ -113,7 +120,61 @@ export class TableViewStore extends ComponentStore<TableViewState> {
 
   init(): void {
     this.fetchReposForSpecificUser();
+    this.searchQueryForSpecificUser();
   }
+
+  readonly searchQueryForSpecificUser = this.effect((trigger$) => {
+    return trigger$.pipe(
+      combineLatestWith(this.sortOrder$, this.searchQuery$, this.pageNo$),
+      withLatestFrom(
+        this.userName$,
+        this.afterCursor$,
+        this.hasNextPage$,
+        this.userRepos$,
+        this.state$,
+      ),
+      filter(
+        ([[, , searchQuery], userName, , hasNextPage]) =>
+          !!userName && !!hasNextPage && !!searchQuery,
+      ),
+      tap(() => this.patchState({ loadingState: LoadingState.LOADING })),
+      switchMap(([[, sortOrder, searchQuery], userName, afterCursor]) => {
+        const searchPayload: SearchInRepoPayload = {
+          userName: userName as string,
+          first: TABLE_FETCH_LIMIT,
+          after: afterCursor,
+          orderBy: sortOrder?.colId ? sortOrder : undefined,
+          searchString: searchQuery,
+        };
+        return this.readRepoService.searchInRepo(searchPayload).pipe(
+          tap(() =>
+            this.patchState({
+              userRepos: [],
+            }),
+          ),
+          tapResponse(
+            (response) => {
+              this.updateUserRepos(response.data);
+              this.patchState({
+                afterCursor: response.pageInfo.hasNextPage
+                  ? response.pageInfo.endCursor
+                  : undefined, //update after cursor from response
+                hasNextPage: response.pageInfo.hasNextPage,
+                totalRecords: response.totalCount,
+                loadingState: LoadingState.LOADED,
+              });
+            },
+            (err: unknown) => {
+              console.log(err); //TODO: add logging mechanism
+              this.patchState({
+                loadingState: LoadingState.ERROR,
+              });
+            },
+          ),
+        );
+      }),
+    );
+  });
 
   readonly fetchReposForSpecificUser = this.effect((trigger$) => {
     return trigger$.pipe(
@@ -126,55 +187,44 @@ export class TableViewStore extends ComponentStore<TableViewState> {
         this.state$,
       ),
       filter(
-        ([[, ,], userName, afterCursor, hasNextPage]) =>
-          !!userName && !!hasNextPage,
+        ([[, , searchQuery], userName, afterCursor, hasNextPage]) =>
+          !!userName && !!hasNextPage && !searchQuery,
       ),
       tap(() => this.patchState({ loadingState: LoadingState.LOADING })),
-      switchMap(
-        ([
-          [, sortOrder, searchQuery],
-          userName,
-          afterCursor,
-          ,
-          userRepos,
-          state,
-        ]) => {
-          const getRepoForUserPayload: GetRepoForUserPayload = {
-            userName: userName as string,
-            first: TABLE_FETCH_LIMIT,
-            after: afterCursor,
-            orderBy: sortOrder?.colId ? sortOrder : undefined,
-          };
-          return this.readRepoService
-            .getRepoForUser(getRepoForUserPayload)
-            .pipe(
-              tap(() =>
-                this.patchState({
-                  userRepos: [],
-                }),
-              ),
-              tapResponse(
-                (response) => {
-                  this.updateUserRepos(response.data);
-                  this.patchState({
-                    afterCursor: response.pageInfo.hasNextPage
-                      ? response.pageInfo.endCursor
-                      : undefined, //update after cursor from response
-                    hasNextPage: response.pageInfo.hasNextPage,
-                    totalRecords: response.totalCount,
-                    loadingState: LoadingState.LOADED,
-                  });
-                },
-                (err: unknown) => {
-                  console.log(err); //TODO: add logging mechanism
-                  this.patchState({
-                    loadingState: LoadingState.ERROR,
-                  });
-                },
-              ),
-            );
-        },
-      ),
+      switchMap(([[, sortOrder], userName, afterCursor]) => {
+        const getRepoForUserPayload: getRepoForUserPayload = {
+          userName: userName as string,
+          first: TABLE_FETCH_LIMIT,
+          after: afterCursor,
+          orderBy: sortOrder?.colId ? sortOrder : undefined,
+        };
+        return this.readRepoService.getRepoForUser(getRepoForUserPayload).pipe(
+          tap(() =>
+            this.patchState({
+              userRepos: [],
+            }),
+          ),
+          tapResponse(
+            (response) => {
+              this.updateUserRepos(response.data);
+              this.patchState({
+                afterCursor: response.pageInfo.hasNextPage
+                  ? response.pageInfo.endCursor
+                  : undefined, //update after cursor from response
+                hasNextPage: response.pageInfo.hasNextPage,
+                totalRecords: response.totalCount,
+                loadingState: LoadingState.LOADED,
+              });
+            },
+            (err: unknown) => {
+              console.log(err); //TODO: add logging mechanism
+              this.patchState({
+                loadingState: LoadingState.ERROR,
+              });
+            },
+          ),
+        );
+      }),
     );
   });
 }

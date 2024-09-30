@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ReadRepoService } from '@github-graphql-assignment/data-access';
 import {
-  GetRepoForUserPayload,
+  getRepoForUserPayload,
   GraphModel,
   LoadingState,
   RECORDS_TO_BE_SHOWN_FOR_GRAPH,
@@ -81,7 +81,7 @@ export class GraphViewStore
       ),
       filter(([, userName]) => !!userName),
       switchMap(([, userName]) => {
-        const getRepoForUserPayload: GetRepoForUserPayload = {
+        const getRepoForUserPayload: getRepoForUserPayload = {
           userName: userName as string,
           first: RECORDS_TO_BE_SHOWN_FOR_GRAPH,
         };

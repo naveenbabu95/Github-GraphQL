@@ -10,13 +10,13 @@ import {
 } from './read-repo-for-user.converter';
 
 describe('ReadRepoForUserConverter', () => {
-  it('converts GetRepoForUserPayload into  EndPointRequestParams', () => {
+  it('converts getRepoForUserPayload into  EndPointRequestParams', () => {
     const result = convertParamsForAPIRequest(GET_REPOS_FOR_USER_PAYLOAD_MOCK);
 
     expect(result).toEqual(ENDPOINT_RESPONSE_USER_MOCK);
   });
 
-  it('converts GetRepoForUserPayload into  EndPointRequestParams when orderBy and next page is empty', () => {
+  it('converts getRepoForUserPayload into  EndPointRequestParams when orderBy and next page is empty', () => {
     const result = convertParamsForAPIRequest({
       ...GET_REPOS_FOR_USER_PAYLOAD_MOCK,
       after: undefined,

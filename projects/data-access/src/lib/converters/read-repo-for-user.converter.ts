@@ -3,7 +3,7 @@ import {
   EndPointRequestParams,
   EndPointResponse,
   EndPointSearchParams,
-  GetRepoForUserPayload,
+  getRepoForUserPayload,
   RepositoryResponse,
   Search,
   SearchInRepoPayload,
@@ -11,7 +11,7 @@ import {
 } from '@github-graphql-assignment/util';
 
 export function convertParamsForAPIRequest(
-  getRepoForUserPayload: GetRepoForUserPayload,
+  getRepoForUserPayload: getRepoForUserPayload,
 ): EndPointRequestParams {
   return {
     userName: getRepoForUserPayload.userName,

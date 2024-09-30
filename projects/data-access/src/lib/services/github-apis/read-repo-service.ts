@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   DataSummary,
   EndPointResponse,
-  GetRepoForUserPayload,
+  getRepoForUserPayload,
   RepositoryResponse,
   Search,
   SearchInRepoPayload,
@@ -24,7 +24,7 @@ export class ReadRepoService {
   constructor(private apollo: Apollo) {}
 
   getRepoForUser(
-    getRepoForUserPayload: GetRepoForUserPayload,
+    getRepoForUserPayload: getRepoForUserPayload,
   ): Observable<DataSummary<RepositoryResponse>> {
     return this.apollo
       .query({

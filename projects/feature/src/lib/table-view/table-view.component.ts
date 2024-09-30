@@ -47,8 +47,8 @@ export class TableViewComponent implements OnInit {
     this.componentStore.updateSort(transformSortParamForTable(sortParam));
   }
 
-  //TODO: implement sort
-  // onSearch() {
-  //   console.log('search');
-  // }
+  onSearch(searchQuery: string) {
+    // console.log('search'searchQuery);
+    this.componentStore.updateSearch(searchQuery);
+  }
 }

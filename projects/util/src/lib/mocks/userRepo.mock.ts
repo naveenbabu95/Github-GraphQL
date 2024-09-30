@@ -4,11 +4,11 @@ import {
   User,
 } from '../models/api-models/github-graphql-api-models';
 import {
-  GetRepoForUserPayload,
+  getRepoForUserPayload,
   RepositoryResponse,
 } from '../models/client-models/github-graphql-client-models';
 
-export const GET_REPOS_FOR_USER_PAYLOAD_MOCK: GetRepoForUserPayload = {
+export const GET_REPOS_FOR_USER_PAYLOAD_MOCK: getRepoForUserPayload = {
   userName: 'test',
   first: 10,
   after: 'Y3Vyc29yOnYyOpHOGEiqIw==',
