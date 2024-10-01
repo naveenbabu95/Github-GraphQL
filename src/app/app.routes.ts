@@ -10,7 +10,19 @@ import {
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'table/:userName', component: TableViewComponent, pathMatch: 'full' },
-  { path: 'graph/:userName', component: GraphViewComponent, pathMatch: 'full' },
+  {
+    path: 'table/:userName',
+    loadComponent: () =>
+      import('@github-graphql-assignment/feature').then(
+        (m) => m.TableViewComponent,
+      ),
+  },
+  {
+    path: 'graph/:userName',
+    loadComponent: () =>
+      import('@github-graphql-assignment/feature').then(
+        (m) => m.GraphViewComponent,
+      ),
+  },
   { path: '**', component: PageNotFoundComponent },
 ];
